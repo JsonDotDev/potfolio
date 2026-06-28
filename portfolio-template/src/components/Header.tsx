@@ -1,12 +1,13 @@
 import { useEffect, useState } from 'react';
+import { Link } from 'react-router-dom';  
 import { profile } from '../data/content';
 import './Header.css';
 
 const NAV_LINKS = [
-  { label: 'Projects', href: '#projects' },
-  { label: 'Experience', href: '#experience' },
-  { label: 'Skills', href: '#skills' },
-  { label: 'Contact', href: '#contact' },
+  { label: 'Projects', href: '/#projects' },
+  { label: 'Experience', href: '/#experience' },
+  { label: 'Skills', href: '/#skills' },
+  { label: 'Contact', href: '/#contact' },
 ];
 
 export default function Header() {
@@ -22,17 +23,17 @@ export default function Header() {
   return (
     <header className={`site-header ${scrolled ? 'is-scrolled' : ''}`}>
       <div className="container site-header__inner">
-        <a href="#top" className="site-header__brand mono">
+        <Link to="/" className="site-header__brand mono">
           <span className="site-header__dot" aria-hidden="true" />
           {profile.name.split(' ').map((n) => n[0]).join('').toUpperCase()}
           <span className="site-header__brand-full">_{profile.name.replace(/\s+/g, '_').toLowerCase()}</span>
-        </a>
+        </Link>
 
         <nav className="site-header__nav" aria-label="Primary">
           {NAV_LINKS.map((link) => (
-            <a key={link.href} href={link.href} className="mono">
+            <Link key={link.href} to={link.href} className="mono">
               {link.label}
-            </a>
+            </Link>
           ))}
         </nav>
 
@@ -55,9 +56,9 @@ export default function Header() {
       {menuOpen && (
         <nav className="site-header__mobile-nav mono" aria-label="Mobile">
           {NAV_LINKS.map((link) => (
-            <a key={link.href} href={link.href} onClick={() => setMenuOpen(false)}>
+            <Link key={link.href} to={link.href} onClick={() => setMenuOpen(false)}>
               {link.label}
-            </a>
+            </Link>
           ))}
           <a href={profile.resumeUrl} download onClick={() => setMenuOpen(false)}>
             Resume ↓

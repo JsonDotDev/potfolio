@@ -15,15 +15,18 @@
   --line: #243029;
   --line-soft: #1c2521;
   --text: #edefea;
-  --text-dim: #9fab9f;
-  --text-faint: #647066;
+  --text-dim: #9f9fab;
+  --text-faint: #646477;
   --accent: #64d8ff;      /* sensor blue */
   --accent-dim: #3f8cab;
-  --accent-soft: rgba(100,216,255,0.1);
+  --accent-soft: rgba(100, 165, 255, 0.1);
   --amber: #ffb454;
   --amber-soft: rgba(255,180,84,0.1);
+  --blueprint: #5b7c99; /* muted blueprint blue - technical line work */ 
+  --blueprint-soft: rgba(91, 124, 153, 0.12);
   --success: #7cffb2;
   --danger: #ff6b6b;
+
 
   /* ---- Type tokens ---- */
   --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', Menlo, monospace;

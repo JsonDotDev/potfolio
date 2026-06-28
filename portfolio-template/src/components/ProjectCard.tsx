@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import type { Project } from '../data/content';
+import { Link } from 'react-router-dom';
 import ProjectDiagram from './ProjectDiagram';
 import './ProjectCard.css';
 
@@ -33,13 +34,19 @@ export default function ProjectCard({ project }: { project: Project }) {
           ))}
         </ul>
 
-        <button
-          className="project-card__toggle mono"
-          onClick={() => setOpen((v) => !v)}
-          aria-expanded={open}
-        >
-          {open ? '− Hide details' : '+ Show details'}
-        </button>
+        <div className="project-card__actions">
+          <button
+            className="project-card__toggle mono"
+            onClick={() => setOpen((v) => !v)}
+            aria-expanded={open}
+          >
+            {open ? '− Hide details' : '+ Show details'}
+          </button>
+
+          <Link to={`/projects/${project.id}`} className="project-card__case-study mono">
+            View full case study →
+          </Link>
+        </div>
 
         {open && (
           <ul className="project-card__details">

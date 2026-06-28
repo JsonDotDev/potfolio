@@ -32,6 +32,10 @@ export type Project = {
   stack: string[];
   diagram: 'controller' | 'vision' | 'mechanical' | 'firmware'; // which placeholder graphic to render
   links?: { label: string; href: string }[];
+  overview?: string[];
+  challenges?: string[];
+  whatIdDoDifferently?: string[];
+  gallery?: ('controller' | 'vision' | 'mechanical' | 'firmware')[];
 };
 
 export const projects: Project[] = [
@@ -166,8 +170,8 @@ export const experience = [
   {
     id: 'internship',
     role: 'Engineering Intern',
-    org: '[Company Name]',
-    period: '[Dates]',
+    org: 'BOA Hydraulics',
+    period: '2025 - 2026',
     points: [
       'Built a YOLOv11-based computer vision tool with a PyQt6 interface for identifying hydraulic fittings on-site.',
       'Redesigned and prototyped a horse reel system, iterating via 3D printing under tight resource and time constraints.',

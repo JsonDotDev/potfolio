@@ -62,7 +62,7 @@ function ControllerDiagram() {
       <line x1="385" y1="180" x2="92" y2="180" stroke="var(--text-faint)" strokeWidth="1.5" />
       <line x1="92" y1="180" x2="92" y2="122" stroke="var(--text-faint)" strokeWidth="1.5" markerEnd="url(#arrow-faint)" />
       <text x="200" y="195" fontFamily="var(--font-mono)" fontSize="9" fill="var(--text-faint)" textAnchor="middle">encoder / IMU feedback</text>
-      <text x="60" y="103" fontFamily="var(--font-mono)" fontSize="9" fill="var(--text-faint)">−</text>
+      <text x="92" y="124" fontFamily="var(--font-mono)" fontSize="9" fill="var(--text-faint)" textAnchor="middle">−</text>
 
       <defs>
         <marker id="arrow" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
