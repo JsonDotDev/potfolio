@@ -41,8 +41,8 @@ export default function SettlingWave() {
     resize();
     window.addEventListener('resize', resize);
 
-    const accent = '#7cffb2';
-    const gridColor = 'rgba(124, 255, 178, 0.08)';
+    const accent = '#64d8ff';
+    const gridColor = 'rgba(2, 3, 2, 0.08)';
     const setpointColor = 'rgba(159, 171, 159, 0.4)';
 
     // step response: underdamped, settling — y(t) = 1 - e^(-zt)cos(wt + phase), scaled

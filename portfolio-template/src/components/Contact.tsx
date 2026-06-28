@@ -20,9 +20,6 @@ export default function Contact() {
               {profile.email}
             </a>
             <div className="contact-card__socials">
-              <a href={profile.github} target="_blank" rel="noreferrer" className="btn">
-                GitHub
-              </a>
               <a href={profile.linkedin} target="_blank" rel="noreferrer" className="btn">
                 LinkedIn
               </a>

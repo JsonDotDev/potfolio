@@ -5,14 +5,13 @@
 // ─────────────────────────────────────────────────────────────────────────
 
 export const profile = {
-  name: 'Your Name',
+  name: 'Jason Chieng',
   role: 'Mechatronics Engineering Student',
   tagline:
-    'I build systems that sense, decide, and move — from control loops on bare-metal microcontrollers to computer-vision tools shipped in industry.',
-  location: 'Based in [Your City]',
-  email: 'you@example.com',
-  github: 'https://github.com/yourusername',
-  linkedin: 'https://linkedin.com/in/yourusername',
+    'I build systems that sense, decide, and move — from control loops on bare-metal microcontrollers to computer-vision tools used in industry.',
+  location: 'Based in Auckland, New Zealand',
+  email: 'jasonchieng99@email.com',
+  linkedin: 'https://linkedin.com/in/jason-chieng',
   resumeUrl: '/resume.pdf', // drop your resume PDF into /public and keep this path
   status: 'Open to graduate & internship roles',
 };
@@ -148,10 +147,10 @@ export type SkillGroup = {
 };
 
 export const skills: SkillGroup[] = [
-  { label: 'Languages', items: ['C', 'C++', 'Python', 'MATLAB'] },
+  { label: 'Programming Languages', items: ['C', 'C++', 'Python', 'MATLAB'] },
   {
     label: 'Embedded & Controls',
-    items: ['Bare-metal MCU programming', 'PI / PID control', 'Datasheet-level register config', 'Sensor integration'],
+    items: ['Bare-metal MCU programming', 'PI control', 'Datasheet-level register config', 'Sensor integration'],
   },
   {
     label: 'Computer Vision & Software',
@@ -159,7 +158,7 @@ export const skills: SkillGroup[] = [
   },
   {
     label: 'Hardware & Prototyping',
-    items: ['3D printing / FDM', 'CAD modelling', 'Mechanical design iteration', 'Resource-constrained scheduling'],
+    items: ['3D printing', 'CAD modelling', 'Mechanical design iteration', 'Resource-constrained scheduling'],
   },
 ];
 
@@ -177,8 +176,8 @@ export const experience = [
   {
     id: 'university',
     role: 'Mechatronics Engineering Student',
-    org: '[University Name]',
-    period: '[Dates]',
+    org: 'University of Auckland',
+    period: '2024 - Present',
     points: [
       'Coursework and project work spanning control systems, embedded C, image processing, and mechanical design.',
       'Hands-on robotics and competition projects applying control theory to physical systems.',

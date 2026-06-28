@@ -17,13 +17,12 @@
   --text: #edefea;
   --text-dim: #9fab9f;
   --text-faint: #647066;
-  --accent: #7cffb2;       /* phosphor green - signal / status LED */
-  --accent-dim: #4f9c73;
-  --accent-soft: rgba(124, 255, 178, 0.1);
-  --amber: #ffb454;        /* warm amber - secondary highlight */
-  --amber-soft: rgba(255, 180, 84, 0.1);
-  --blueprint: #5b7c99;    /* muted blueprint blue - technical line work */
-  --blueprint-soft: rgba(91, 124, 153, 0.12);
+  --accent: #64d8ff;      /* sensor blue */
+  --accent-dim: #3f8cab;
+  --accent-soft: rgba(100,216,255,0.1);
+  --amber: #ffb454;
+  --amber-soft: rgba(255,180,84,0.1);
+  --success: #7cffb2;
   --danger: #ff6b6b;
 
   /* ---- Type tokens ---- */
@@ -231,9 +230,9 @@ img, svg {
 }
 
 .btn-primary:hover {
-  background: #93ffc0;
-  border-color: #93ffc0;
-  color: #0a120d;
+  background: #a5e7fb;
+  border-color: #a5e7fb;
+  color: #0e1210;
 }
 
 .visually-hidden {
