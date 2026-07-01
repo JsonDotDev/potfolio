@@ -9,6 +9,8 @@ import warmanDragon from '../assets/warman/dragon-backboard.jpg';
 import warmanFinalArms from '../assets/warman/final-arms.jpg';
 import warmanCompetitionRun from '../assets/warman/competition-run.mov';
 import warmanWiring from '../assets/warman/wiring-diagram.jpg';
+import vexCardThumb from '../assets/vex/card-thumbnail.jpg';
+import vexDemoRun from '../assets/vex/demo-run.mp4';
 
 
 export const profile = {
@@ -50,30 +52,57 @@ export type Project = {
   gallery?: (
     | { kind: 'diagram'; diagram: 'controller' | 'vision' | 'mechanical' | 'firmware'; caption?: string }
     | { kind: 'image'; src: string; alt: string; caption?: string }
+    | { kind: 'video'; src: string; caption?: string; poster?: string; type?: string }
   )[];
   video?:
-    | { embedUrl: string; caption?: string }
-    | { src: string; caption?: string; poster?: string; type?: string };
+    | { embedUrl: string; caption?: string; label?: string }
+    | { src: string; caption?: string; label?: string; poster?: string; type?: string };
 };
 
 export const projects: Project[] = [
   {
     id: 'vex-pi-controller',
     index: '01',
-    title: 'VEX Autonomous Navigation',
-    subtitle: 'PI-controlled robot navigating a complex course',
+    title: 'VEX Autonomous Warehouse Robot',
+    subtitle: 'PI-controlled navigation, line following, and payload delivery',
     category: 'University',
-    period: 'University Project',
+    period: 'MECHENG 201 — University of Auckland',
     summary:
-      'Designed and tuned a PI controller so a VEX robot could autonomously navigate a multi-stage obstacle course, correcting for drift and disturbance in real time.',
+      'Built an autonomous warehouse robot in C++ on VEX hardware with a group partner, implementing a PI-controlled drive system with anti-windup, a 3-sensor line follower with full 8-state logic and recovery, and ultrasonic positioning — completing a full pickup-and-delivery loop reliably across two demo sessions.',
     details: [
-      'Implemented a proportional-integral (PI) control loop to track heading and distance setpoints, reducing steady-state error from wheel-slip and uneven terrain.',
-      'Tuned gains experimentally on-hardware, balancing response speed against overshoot across varied course sections.',
-      'Built sensor feedback handling (encoders / IMU) into the control loop to keep the robot on-path through turns and obstacles.',
-      'Worked in a small team to integrate control code with mechanical subsystems under competition time pressure.',
+      'Implemented driveStraight using a PI controller that simultaneously corrects distance error and wheel imbalance from encoder counts, with smooth acceleration ramping and an anti-windup mechanism to prevent integrator saturation.',
+      'Built a full 8-state line follower using three light sensors: straight driving (010), gentle curves (100/001), sharp pivots (110/011), line-lost recovery (000), stuck-in-corner handling (101/111).',
+      'Wrote a recovery() routine using lastTurnDirection memory so the robot could relocate a lost brown line by rotating back in its last known turning direction.',
+      'Implemented driveUltraSonic with up to 3 retry attempts on invalid sensor readings, and used it for precise payload pickup (400mm) and drop-off (390mm from wall).',
+      'Added slack compensation to rotateRobotAngle — passing an offset angle to counteract surface slippage and achieve accurate net rotation on taped floors.',
+      'Designed adaptive path planning: stored the actual pickup distance as d1, then reversed exactly d1+50mm to re-align the pivot point with the brown line regardless of payload position.',
     ],
-    stack: ['VEX Robotics', 'PI Control', 'C++', 'Sensor Fusion'],
+    stack: ['C++', 'VEX Robotics', 'PI Control', 'Encoder Feedback', 'Ultrasonic Sensing', 'Line Following'],
     diagram: 'controller',
+    image: { src: vexCardThumb, alt: 'VEX robot on the competition floor' },
+    overview: [
+      'Contracted (fictionally) by the Dairy Industry Cooperative, me and my group partner were tasked with building a fully autonomous robot that could leave a charging station, navigate to a predetermined pickup point, collect a fragile payload, follow a line to the drop-off zone, deposit the payload accurately in the centre of the target, and return to its start position — all without human input.',
+      'The project was split into two distinct sub-problems: reliable straight-line and rotational movement (solved with PI/P controllers and encoder feedback), and accurate navigation along a course defined by a brown line and black stop markers (solved with a 3-sensor line follower). Getting both to work together consistently was the core engineering challenge.',
+      'The robot completed the full course twice in the first demonstration session. After tuning speed and drop-off distance between sessions, it ran faster and more accurately in the second session.',
+    ],
+    challenges: [
+      'Pure encoder-based navigation proved unreliable over longer distances — wheel slip and backlash caused small errors to accumulate, leading to inconsistent final positioning. This drove the decision to use the brown line as the primary navigation reference for the delivery leg, since it provides a constant external reference unaffected by the robot\'s hardware variability.',
+      'Light sensor readings were occasionally inconsistent during the 90° right turn on demo day — in some runs the robot missed the brown line entirely. The root cause was brown detection thresholds needing tighter calibration for that specific section of the course.',
+      'The PI controller\'s integrator would saturate the motors when error was large, causing overshoot. Implementing anti-windup (stopping integration when motors are already at their power limit) fixed this and significantly improved stopping accuracy.',
+      'Line following broke down when the robot lost the brown line mid-turn (000 case) — the naive approach of just stopping didn\'t work since the robot was mid-rotation. The recovery() routine using lastTurnDirection memory solved this by continuing the turn in the correct direction until any sensor re-detected the line.',
+      'Starting line following from a stationary position on the black line was impossible since the robot couldn\'t detect the brown line from that position. The searchBrown() function handled this by first moving forward, then performing a left-right sweeping manoeuvre if the line still wasn\'t found, ensuring the robot located the brown line every time.',
+    ],
+    whatIdDoDifferently: [
+      'Tune the brown detection thresholds more carefully on the actual competition surface before the demo, rather than relying on values calibrated in a different environment — this was the direct cause of the inconsistent 90° turn readings.',
+      'Replace the if/else if chain in the line following function with a switch-case statement from the start — the report flagged this as a code speed and efficiency improvement we didn\'t have time to implement.',
+      'Add a helper function that aligns all three sensors with the black line before the payload drop-off, for more repeatable final positioning. We knew this would be more robust than relying on line following alone to straighten the robot, but our line follower was accurate enough that we deprioritised it.',
+    ],
+    video: {
+      src: vexDemoRun,
+      label: 'Demo Run',
+      caption: 'Vex Robot — Demo run',
+    },
+    
   },
   {
     id: 'warman-mini',
@@ -93,7 +122,7 @@ export const projects: Project[] = [
     ],
     stack: ['Mechanical Design', 'CAD', 'Laser Cutting', 'Circuit Design', 'Soldering', 'Arduino', 'Teamwork'],
     diagram: 'mechanical',
-    image: { src: warmanCardThumb, alt: 'CAD render of the Royal Picker Upper robot arms and central tower' },
+    image: { src: warmanCardThumb, alt: 'The Royal Picker Upper robot arms and central tower' },
     overview: [
       '"The Royal Picker Upper" was built with teammates and it is our entry to a 235-style design-and-build competition: a fully mechanical robot that had to autonomously pick up pods (tennis balls) from two different heights and deliver them into an incinerator as quickly and reliably as possible.',
       'We leaned into a castle theme — laser-cut brick-pattern walls, a hand-painted dragon guarding its hoard on the backboard, a red "carpet" ramp, and a hidden Shrek-inspired donkey easter egg. The theme gave the team a shared identity to design around and made the robot far more memorable to judges.',
@@ -117,6 +146,7 @@ export const projects: Project[] = [
     ],
     video: {
       src: warmanCompetitionRun,
+      label: 'Competition Run',
       caption: 'The Royal Picker Upper — competition run',
     },
   },

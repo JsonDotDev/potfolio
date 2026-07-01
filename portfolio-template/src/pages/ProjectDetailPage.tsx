@@ -98,7 +98,7 @@ export default function ProjectDetailPage() {
           {/* Video section */}
           {project.video && (
             <section className="case-study__section">
-              <p className="eyebrow">Competition Run</p>
+              <p className="eyebrow">{project.video.label ?? 'Demo Run'}</p>
               <div className="case-study__video-wrap">
                 {'embedUrl' in project.video ? (
                   <iframe
@@ -133,6 +133,10 @@ export default function ProjectDetailPage() {
                   <figure className="case-study__gallery-item" key={i}>
                     {item.kind === 'image' ? (
                       <img src={item.src} alt={item.alt} />
+                    ) : item.kind === 'video' ? (
+                      <video src={item.src} poster={item.poster} controls playsInline>
+                        Your browser does not support the video tag.
+                      </video>
                     ) : (
                       <ProjectDiagram kind={item.diagram} />
                     )}
