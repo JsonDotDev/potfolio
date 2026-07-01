@@ -162,3 +162,11 @@
 .project-card__link:hover {
   opacity: 0.75;
 }
+
+.project-card__image {
+  width: 100%;
+  aspect-ratio: 400 / 220;
+  object-fit: cover;
+  background: var(--bg-raised);
+  display: block;
+}

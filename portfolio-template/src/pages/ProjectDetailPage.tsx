@@ -7,9 +7,7 @@ export default function ProjectDetailPage() {
   const { projectId } = useParams<{ projectId: string }>();
   const project = projects.find((p) => p.id === projectId);
 
-  if (!project) {
-    return <Navigate to="/" replace />;
-  }
+  if (!project) return <Navigate to="/" replace />;
 
   const currentIdx = projects.findIndex((p) => p.id === projectId);
   const prev = projects[currentIdx - 1];
@@ -34,9 +32,7 @@ export default function ProjectDetailPage() {
 
           <ul className="case-study__stack">
             {project.stack.map((s) => (
-              <li key={s} className="tag">
-                {s}
-              </li>
+              <li key={s} className="tag">{s}</li>
             ))}
           </ul>
 
@@ -51,17 +47,20 @@ export default function ProjectDetailPage() {
           )}
         </header>
 
+        {/* Hero image — real photo if available, otherwise the schematic diagram */}
         <div className="case-study__hero-diagram">
-          <ProjectDiagram kind={project.diagram} />
+          {project.image ? (
+            <img src={project.image.src} alt={project.image.alt} className="case-study__hero-img" />
+          ) : (
+            <ProjectDiagram kind={project.diagram} />
+          )}
         </div>
 
         <div className="case-study__body">
           <section className="case-study__section">
             <p className="eyebrow">Overview</p>
             {(project.overview ?? [project.summary]).map((para, i) => (
-              <p key={i} className="case-study__paragraph">
-                {para}
-              </p>
+              <p key={i} className="case-study__paragraph">{para}</p>
             ))}
           </section>
 
@@ -76,9 +75,7 @@ export default function ProjectDetailPage() {
 
           {project.challenges && project.challenges.length > 0 && (
             <section className="case-study__section">
-              <p className="eyebrow" style={{ color: 'var(--amber)' }}>
-                Challenges
-              </p>
+              <p className="eyebrow" style={{ color: 'var(--amber)' }}>Challenges</p>
               <ul className="case-study__list case-study__list--amber">
                 {project.challenges.map((c, i) => (
                   <li key={i}>{c}</li>
@@ -89,9 +86,7 @@ export default function ProjectDetailPage() {
 
           {project.whatIdDoDifferently && project.whatIdDoDifferently.length > 0 && (
             <section className="case-study__section">
-              <p className="eyebrow" style={{ color: 'var(--blueprint)' }}>
-                What I'd do differently
-              </p>
+              <p className="eyebrow" style={{ color: 'var(--blueprint)' }}>What I'd do differently</p>
               <ul className="case-study__list case-study__list--blueprint">
                 {project.whatIdDoDifferently.map((w, i) => (
                   <li key={i}>{w}</li>
@@ -100,14 +95,51 @@ export default function ProjectDetailPage() {
             </section>
           )}
 
+          {/* Video section */}
+          {project.video && (
+            <section className="case-study__section">
+              <p className="eyebrow">Competition Run</p>
+              <div className="case-study__video-wrap">
+                {'embedUrl' in project.video ? (
+                  <iframe
+                    src={project.video.embedUrl}
+                    title={project.video.caption ?? 'Project video'}
+                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                    allowFullScreen
+                  />
+                ) : (
+                  <video
+                    src={project.video.src}
+                    poster={project.video.poster}
+                    controls
+                    playsInline
+                  >
+                    Your browser does not support the video tag.
+                  </video>
+                )}
+              </div>
+              {project.video.caption && (
+                <p className="case-study__caption mono">{project.video.caption}</p>
+              )}
+            </section>
+          )}
+
+          {/* Gallery */}
           {project.gallery && project.gallery.length > 0 && (
             <section className="case-study__section">
               <p className="eyebrow">Gallery</p>
               <div className="case-study__gallery">
-                {project.gallery.map((kind, i) => (
-                  <div className="case-study__gallery-item" key={i}>
-                    <ProjectDiagram kind={kind} />
-                  </div>
+                {project.gallery.map((item, i) => (
+                  <figure className="case-study__gallery-item" key={i}>
+                    {item.kind === 'image' ? (
+                      <img src={item.src} alt={item.alt} />
+                    ) : (
+                      <ProjectDiagram kind={item.diagram} />
+                    )}
+                    {item.caption && (
+                      <figcaption className="case-study__caption mono">{item.caption}</figcaption>
+                    )}
+                  </figure>
                 ))}
               </div>
             </section>
@@ -119,16 +151,12 @@ export default function ProjectDetailPage() {
             <Link to={`/projects/${prev.id}`} className="case-study__pagination-link">
               ← {prev.title}
             </Link>
-          ) : (
-            <span />
-          )}
+          ) : <span />}
           {next ? (
             <Link to={`/projects/${next.id}`} className="case-study__pagination-link case-study__pagination-link--next">
               {next.title} →
             </Link>
-          ) : (
-            <span />
-          )}
+          ) : <span />}
         </nav>
       </div>
     </article>

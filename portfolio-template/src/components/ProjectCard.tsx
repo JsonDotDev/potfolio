@@ -10,7 +10,11 @@ export default function ProjectCard({ project }: { project: Project }) {
   return (
     <article className="project-card">
       <div className="project-card__diagram">
-        <ProjectDiagram kind={project.diagram} />
+        {project.image ? (
+          <img src={project.image.src} alt={project.image.alt} className="project-card__image" />
+        ) : (
+          <ProjectDiagram kind={project.diagram} />
+        )}
         <span className="project-card__index mono">{project.index}</span>
       </div>
 
