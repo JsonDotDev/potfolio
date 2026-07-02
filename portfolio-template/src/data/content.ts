@@ -50,7 +50,7 @@ export type Project = {
   summary: string;
   details: string[];
   stack: string[];
-  diagram: 'controller' | 'vision' | 'mechanical' | 'firmware' | 'filter';
+  diagram: 'controller' | 'vision' | 'mechanical' | 'firmware' ;
   links?: { label: string; href: string }[];
 
   // Optional: real photo for the card + case study hero

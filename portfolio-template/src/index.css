@@ -9,23 +9,23 @@
 
 :root {
   /* ---- Color tokens ---- */
-  --bg: #0e1210;
-  --bg-raised: #141a17;
-  --bg-card: #161d1a;
-  --line: #243029;
-  --line-soft: #1c2521;
-  --text: #edefea;
-  --text-dim: #9f9fab;
-  --text-faint: #646477;
+  --bg: #f4f7f5;
+  --bg-raised: #ffffff;
+  --bg-card: #eef3ef;
+  --line: #d6e0d8;
+  --line-soft: #e4ebe6;
+  --text: #101512;
+  --text-dim: #435049;
+  --text-faint: #6f7d75;
   --accent: #64d8ff;      /* sensor blue */
   --accent-dim: #3f8cab;
   --accent-soft: rgba(100, 165, 255, 0.1);
-  --amber: #ffb454;
-  --amber-soft: rgba(255,180,84,0.1);
-  --blueprint: #5b7c99; /* muted blueprint blue - technical line work */ 
-  --blueprint-soft: rgba(91, 124, 153, 0.12);
-  --success: #7cffb2;
-  --danger: #ff6b6b;
+  --amber: #ad6b14;
+  --amber-soft: rgba(173, 107, 20, 0.1);
+  --blueprint: #4d6a81; /* muted blueprint blue - technical line work */ 
+  --blueprint-soft: rgba(77, 106, 129, 0.12);
+  --success: #22734e;
+  --danger: #c94e4e;
 
 
   /* ---- Type tokens ---- */
@@ -37,7 +37,7 @@
   --radius-sm: 3px;
   --radius-md: 6px;
 
-  color-scheme: dark;
+  color-scheme: light;
 }
 
 :root[data-theme='light'] {
@@ -49,9 +49,9 @@
   --text: #101512;
   --text-dim: #435049;
   --text-faint: #6f7d75;
-  --accent: #007ea7;
-  --accent-dim: #2c6c82;
-  --accent-soft: rgba(0, 126, 167, 0.1);
+  --accent: #017dd0;
+  --accent-dim: #3f6eab;
+  --accent-soft: rgba(100, 165, 255, 0.1);
   --amber: #ad6b14;
   --amber-soft: rgba(173, 107, 20, 0.1);
   --blueprint: #4d6a81;
@@ -60,6 +60,28 @@
   --danger: #c94e4e;
 
   color-scheme: light;
+}
+
+:root[data-theme='dark'] {
+  --bg: #0e1210;
+  --bg-raised: #141a17;
+  --bg-card: #161d1a;
+  --line: #243029;
+  --line-soft: #1c2521;
+  --text: #edefea;
+  --text-dim: #9f9fab;
+  --text-faint: #646477;
+  --accent: #64d8ff;
+  --accent-dim: #3f8cab;
+  --accent-soft: rgba(100, 165, 255, 0.1);
+  --amber: #ffb454;
+  --amber-soft: rgba(255,180,84,0.1);
+  --blueprint: #5b7c99;
+  --blueprint-soft: rgba(91, 124, 153, 0.12);
+  --success: #7cffb2;
+  --danger: #ff6b6b;
+
+  color-scheme: dark;
 }
 
 * {
