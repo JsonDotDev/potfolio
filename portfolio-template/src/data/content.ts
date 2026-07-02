@@ -60,15 +60,18 @@ export type Project = {
   overview?: string[];
   challenges?: string[];
   whatIdDoDifferently?: string[];
-  gallery?: (
-    | { kind: 'diagram'; diagram: 'controller' | 'vision' | 'mechanical' | 'firmware'; caption?: string }
-    | { kind: 'image'; src: string; alt: string; caption?: string }
-    | { kind: 'video'; src: string; caption?: string; poster?: string; type?: string }
-  )[];
-  video?:
-    | { embedUrl: string; caption?: string; label?: string }
-    | { src: string; caption?: string; label?: string; poster?: string; type?: string };
+  gallery?: ProjectGalleryItem[];
+  video?: ProjectVideo;
 };
+
+export type ProjectGalleryItem =
+  | { kind: 'diagram'; diagram: 'controller' | 'vision' | 'mechanical' | 'firmware'; caption?: string }
+  | { kind: 'image'; src: string; alt: string; caption?: string }
+  | { kind: 'video'; src: string; caption?: string; poster?: string; type?: string };
+
+export type ProjectVideo =
+  | { embedUrl: string; caption?: string; label?: string }
+  | { src: string; caption?: string; label?: string; poster?: string; type?: string };
 
 export const projects: Project[] = [
   {
