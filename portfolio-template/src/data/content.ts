@@ -28,7 +28,7 @@ export const profile = {
   name: 'Jason Chieng',
   role: 'Mechatronics Engineering Student',
   tagline:
-    'I build systems that sense, decide, and move — from control loops on bare-metal microcontrollers to computer-vision tools used in industry.',
+    'I build systems that sense, decide, and move. From control loops on bare-metal microcontrollers to computer-vision tools used in industry.',
   location: 'Based in Auckland, New Zealand',
   email: 'jasonchieng99@email.com',
   linkedin: 'https://linkedin.com/in/jason-chieng',
@@ -82,7 +82,7 @@ export const projects: Project[] = [
     category: 'University',
     period: 'MECHENG 201 — University of Auckland',
     summary:
-      'Built an autonomous warehouse robot in C++ on VEX hardware with a group partner, implementing a PI-controlled drive system with anti-windup, a 3-sensor line follower with full 8-state logic and recovery, and ultrasonic positioning — completing a full pickup-and-delivery loop reliably across two demo sessions.',
+      'Built an autonomous warehouse robot in C++ on VEX hardware with a group partner, implementing a PI-controlled drive system with anti-windup, a 3-sensor line follower with full 8-state logic and recovery, and ultrasonic positioning, completing a full pickup-and-delivery loop reliably across two demo sessions.',
     details: [
       'Implemented driveStraight using a PI controller that simultaneously corrects distance error and wheel imbalance from encoder counts, with smooth acceleration ramping and an anti-windup mechanism to prevent integrator saturation.',
       'Built a full 8-state line follower using three light sensors: straight driving (010), gentle curves (100/001), sharp pivots (110/011), line-lost recovery (000), stuck-in-corner handling (101/111).',
@@ -122,7 +122,7 @@ export const projects: Project[] = [
     id: 'warman-mini',
     index: '02',
     title: 'The Royal Picker Upper',
-    subtitle: '235 Design & Build — castle-themed pod-collection robot',
+    subtitle: '235 Design & Build, castle-themed pod-collection robot',
     category: 'University',
     period: 'MECHENG 235 — University Project',
     summary:
@@ -173,7 +173,7 @@ export const projects: Project[] = [
     category: 'University',
     period: 'MECHENG 313 — University of Auckland',
     summary:
-      'Characterised the ADC performance of the ATmega328P by sampling a 200mHz sawtooth waveform at multiple prescaler values, measuring offset and gain error from datasheet-derived calculations, and identifying the speed-accuracy trade-off — all configured at register level in bare-metal C with no HAL.',
+      'Characterised the ADC performance of the ATmega328P by sampling a 200mHz sawtooth waveform at multiple prescaler values, measuring offset and gain error from datasheet-derived calculations, and identifying the speed-accuracy trade-off, all configured at register level in bare-metal C.',
     details: [
       'Configured the ATmega328P ADC entirely at register level, reference voltage selection, prescaler bits, input pin mux, by reading section 23 of the ATmega328P datasheet rather than using Arduino library functions.',
       'Built a finite state machine in firmware: State 0 continuously samples pin A1 at 200 samples/sec into a 1000-sample ring buffer; State 1 halts sampling and transmits the buffer to a PC over USB serial for analysis.',
@@ -209,7 +209,7 @@ export const projects: Project[] = [
     id: 'hydraulic-fitting-cv',
     index: '04',
     title: 'Smart Hose End Thread Identification Tool',
-    subtitle: 'YOLOv11 computer vision + PyQt6 desktop app — built for BOA Hydraulics',
+    subtitle: 'YOLOv11 computer vision + PyQt6 desktop app',
     category: 'Internship',
     period: 'BOA Hydraulics — Dec 2025 to Feb 2026',
     summary:
@@ -257,7 +257,7 @@ export const projects: Project[] = [
     id: 'horse-reel-redesign',
     index: '05',
     title: 'BOApod Hose Reel System Redesign',
-    subtitle: 'Single-motor drive replacing seven — rack-and-pinion selector with Arduino',
+    subtitle: 'Single-motor drive replacing seven stepper motors with a servo-actuated rack-and-pinion selector',
     category: 'Internship',
     period: 'BOA Hydraulics — Dec 2025 to Feb 2026',
     summary:
