@@ -3,6 +3,8 @@ import { Link } from 'react-router-dom';
 import { profile } from '../data/content';
 import './Header.css';
 
+type ThemeMode = 'dark' | 'light';
+
 const NAV_LINKS = [
   { label: 'Projects', href: '/#projects' },
   { label: 'Experience', href: '/#experience' },
@@ -10,7 +12,7 @@ const NAV_LINKS = [
   { label: 'Contact', href: '/#contact' },
 ];
 
-export default function Header() {
+export default function Header({ theme, onToggleTheme }: { theme: ThemeMode; onToggleTheme: () => void }) {
   const [scrolled, setScrolled] = useState(false);
   const [menuOpen, setMenuOpen] = useState(false);
 
@@ -41,6 +43,10 @@ export default function Header() {
           Resume
         </a>
 
+        <button className="btn site-header__theme-toggle" onClick={onToggleTheme} aria-label={`Switch to ${theme === 'dark' ? 'light' : 'dark'} mode`}>
+          {theme === 'dark' ? 'Light mode' : 'Dark mode'}
+        </button>
+
         <button
           className="site-header__menu-btn"
           aria-label={menuOpen ? 'Close menu' : 'Open menu'}
@@ -60,6 +66,9 @@ export default function Header() {
               {link.label}
             </Link>
           ))}
+          <button type="button" className="site-header__mobile-theme" onClick={onToggleTheme}>
+            {theme === 'dark' ? 'Switch to light mode' : 'Switch to dark mode'}
+          </button>
           <a href={profile.resumeUrl} download onClick={() => setMenuOpen(false)}>
             Resume ↓
           </a>

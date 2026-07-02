@@ -3,7 +3,7 @@
 // usage in ProjectCard.tsx with an <img> tag.
 
 type DiagramProps = {
-  kind: 'controller' | 'vision' | 'mechanical' | 'firmware';
+  kind: 'controller' | 'vision' | 'mechanical' | 'firmware' | 'filter';
 };
 
 export default function ProjectDiagram({ kind }: DiagramProps) {
@@ -16,6 +16,8 @@ export default function ProjectDiagram({ kind }: DiagramProps) {
       return <MechanicalDiagram />;
     case 'firmware':
       return <FirmwareDiagram />;
+    case 'filter':
+      return <FilterDiagram />;
     default:
       return null;
   }
@@ -185,6 +187,52 @@ function FirmwareDiagram() {
       ))}
 
       <text x="200" y="206" fontFamily="var(--font-mono)" fontSize="9.5" fill="var(--text-faint)" textAnchor="middle">datasheet → register-level config</text>
+    </svg>
+  );
+}
+
+// Image filtering pipeline diagram
+function FilterDiagram() {
+  return (
+    <svg viewBox="0 0 400 220" xmlns="http://www.w3.org/2000/svg" role="img" aria-label="Image filtering pipeline diagram">
+      <rect x="0" y="0" width="400" height="220" fill="var(--bg-raised)" />
+      <g stroke="var(--line-soft)" strokeWidth="1">
+        {Array.from({ length: 9 }).map((_, i) => (
+          <line key={`v${i}`} x1={i * 50} y1="0" x2={i * 50} y2="220" />
+        ))}
+        {Array.from({ length: 5 }).map((_, i) => (
+          <line key={`h${i}`} x1="0" y1={i * 55} x2="400" y2={i * 55} />
+        ))}
+      </g>
+
+      <rect x="36" y="62" width="72" height="96" rx="3" fill="var(--bg-card)" stroke="var(--accent)" strokeWidth="1.5" />
+      <text x="72" y="92" fontFamily="var(--font-mono)" fontSize="10" fill="var(--accent)" textAnchor="middle">RGB</text>
+      <text x="72" y="108" fontFamily="var(--font-mono)" fontSize="8" fill="var(--text-dim)" textAnchor="middle">input image</text>
+
+      <line x1="108" y1="110" x2="148" y2="110" stroke="var(--text-dim)" strokeWidth="1.5" markerEnd="url(#arrow-filter)" />
+
+      <rect x="148" y="42" width="96" height="36" rx="3" fill="var(--bg-card)" stroke="var(--blueprint)" strokeWidth="1.5" />
+      <text x="196" y="63" fontFamily="var(--font-mono)" fontSize="10" fill="var(--blueprint)" textAnchor="middle">GREYSCALE</text>
+
+      <rect x="148" y="92" width="96" height="36" rx="3" fill="var(--bg-card)" stroke="var(--amber)" strokeWidth="1.5" />
+      <text x="196" y="113" fontFamily="var(--font-mono)" fontSize="10" fill="var(--amber)" textAnchor="middle">THRESHOLD</text>
+
+      <rect x="148" y="142" width="96" height="36" rx="3" fill="var(--bg-card)" stroke="var(--accent)" strokeWidth="1.5" />
+      <text x="196" y="163" fontFamily="var(--font-mono)" fontSize="10" fill="var(--accent)" textAnchor="middle">LAPLACIAN</text>
+
+      <line x1="244" y1="60" x2="292" y2="60" stroke="var(--text-dim)" strokeWidth="1.5" markerEnd="url(#arrow-filter)" />
+      <line x1="244" y1="110" x2="292" y2="110" stroke="var(--text-dim)" strokeWidth="1.5" markerEnd="url(#arrow-filter)" />
+      <line x1="244" y1="160" x2="292" y2="160" stroke="var(--text-dim)" strokeWidth="1.5" markerEnd="url(#arrow-filter)" />
+
+      <rect x="292" y="62" width="72" height="96" rx="3" fill="var(--bg-card)" stroke="var(--accent)" strokeWidth="1.5" />
+      <text x="328" y="92" fontFamily="var(--font-mono)" fontSize="10" fill="var(--accent)" textAnchor="middle">OUTPUT</text>
+      <text x="328" y="108" fontFamily="var(--font-mono)" fontSize="8" fill="var(--text-dim)" textAnchor="middle">sketch / mask</text>
+
+      <defs>
+        <marker id="arrow-filter" markerWidth="8" markerHeight="8" refX="6" refY="3" orient="auto">
+          <path d="M0,0 L6,3 L0,6 Z" fill="var(--text-dim)" />
+        </marker>
+      </defs>
     </svg>
   );
 }

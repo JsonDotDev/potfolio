@@ -9,8 +9,19 @@ import warmanDragon from '../assets/warman/dragon-backboard.jpg';
 import warmanFinalArms from '../assets/warman/final-arms.jpg';
 import warmanCompetitionRun from '../assets/warman/competition-run.mov';
 import warmanWiring from '../assets/warman/wiring-diagram.jpg';
+import warmanLeaderboard from '../assets/warman/leaderboard.jpg';
 import vexCardThumb from '../assets/vex/card-thumbnail.jpg';
 import vexDemoRun from '../assets/vex/demo-run.mp4';
+import baremetalFSM from '../assets/baremetal/fsm-diagram.png';
+import baremetalCircuit from '../assets/baremetal/circuit-diagram.png';
+import threadIDDemo from '../assets/threadID/Thread ID Demo Video.mp4';
+import threadIDCardThumb from '../assets/threadID/data-collection-setup.png';
+import threadIDFinalFidelity from '../assets/threadID/final-ui.jpg';
+import threadIDModelTrainingResults from '../assets/threadID/thread-id-results.png';
+import threadIDModelTraining from '../assets/threadID/data-augmentation.jpg';
+import hoseReelCircuit from '../assets/hosereel/circuit-diagram.png';
+import hoseReelCardThumb from '../assets/hosereel/hose-reel-thumbnail.png';
+import hoseReelDemo from '../assets/hosereel/hose-reel-demo.mov';
 
 
 export const profile = {
@@ -39,7 +50,7 @@ export type Project = {
   summary: string;
   details: string[];
   stack: string[];
-  diagram: 'controller' | 'vision' | 'mechanical' | 'firmware';
+  diagram: 'controller' | 'vision' | 'mechanical' | 'firmware' | 'filter';
   links?: { label: string; href: string }[];
 
   // Optional: real photo for the card + case study hero
@@ -143,6 +154,7 @@ export const projects: Project[] = [
       { kind: 'image', src: warmanDragon, alt: 'Hand-painted dragon on the robot backboard', caption: 'Hand-painted dragon backboard — guarding its hoard' },
       { kind: 'image', src: warmanFinalArms, alt: 'Final arm mechanism during testing', caption: 'Final arm mechanism during testing' },
       { kind: 'image', src: warmanWiring, alt: 'Colour-coded wiring diagram', caption: 'Colour-coded wiring — black/ground, red/power, purple+green/signal, blue/limit switches' },
+      { kind: 'image', src: warmanLeaderboard, alt: 'Competition leaderboard', caption: 'Competition leaderboard — 4th place with a 3.7-second run' },
     ],
     video: {
       src: warmanCompetitionRun,
@@ -151,73 +163,138 @@ export const projects: Project[] = [
     },
   },
   {
-    id: 'matlab-image-filter',
-    index: '03',
-    title: 'Image Filtering in MATLAB',
-    subtitle: 'Signal & image processing coursework',
-    category: 'University',
-    period: 'University Coursework',
-    summary:
-      'Implemented image filters in MATLAB, building intuition for spatial-domain and frequency-domain filtering techniques used widely in vision and signal-processing systems.',
-    details: [
-      'Coded convolution-based filters from first principles rather than relying solely on built-in toolbox functions.',
-      'Explored the effect of kernel choice and filter parameters on noise reduction and edge preservation.',
-      'Built a foundation in image processing that later carried directly into computer-vision work during internship.',
-    ],
-    stack: ['MATLAB', 'Image Processing', 'Linear Algebra'],
-    diagram: 'vision',
-  },
-  {
     id: 'baremetal-microcontroller',
-    index: '04',
-    title: 'Bare-Metal Microcontroller Programming',
-    subtitle: 'Register-level C, no HAL, no shortcuts',
+    index: '03',
+    title: 'ATmega328P ADC Performance',
+    subtitle: 'Bare-metal C, register-level config, and ADC performance analysis',
     category: 'University',
-    period: 'University Coursework',
+    period: 'MECHENG 313 — University of Auckland',
     summary:
-      'Programmed a microcontroller in C at the register level — no hardware abstraction layer — which forced a close reading of datasheets to configure peripherals correctly.',
+      'Characterised the ADC performance of the ATmega328P by sampling a 200mHz sawtooth waveform at multiple prescaler values, measuring offset and gain error from datasheet-derived calculations, and identifying the speed-accuracy trade-off — all configured at register level in bare-metal C with no HAL.',
     details: [
-      'Learned to navigate datasheets and reference manuals to configure registers directly for GPIO, timers, and communication peripherals.',
-      'Debugged at the hardware/software boundary, building a mental model of how C code maps to physical pin and register behaviour.',
-      'Developed comfort with low-level systems work that underpins reliable embedded development.',
+      'Configured the ATmega328P ADC entirely at register level — reference voltage selection, prescaler bits, input pin mux — by reading section 23 of the ATmega328P datasheet rather than using Arduino library functions.',
+      'Built a finite state machine in firmware: State 0 continuously samples pin A1 at 200 samples/sec into a 1000-sample ring buffer; State 1 halts sampling and transmits the buffer to a PC over USB serial for analysis.',
+      'Wired the hardware from scratch: signal generator → 1kΩ resistor → A1 pin, and a voltage divider (two 1kΩ resistors off the 5V rail) to generate a 2.5V AREF reference voltage.',
+      'Calculated offset and gain error in LSB at each prescaler value using the method from ATmega328P datasheet section 23.6.3, then plotted results in MATLAB.',
+      'Proposed a firmware correction formula to compensate measured offset and gain error: ADC_corrected = (ADC_raw − Offset) × GainFactor, where GainFactor = 255 / (255 − GainError_LSB).',
     ],
-    stack: ['C', 'Bare-Metal', 'Datasheets', 'Embedded Systems'],
+    stack: ['C', 'Bare-Metal', 'ATmega328P', 'ADC', 'Datasheets'],
     diagram: 'firmware',
+    image: { src: baremetalCircuit, alt: 'Bare-metal ADC circuit' },
+    overview: [
+      'The goal was to quantify how accurately the ATmega328P\'s built-in ADC could sample an analog signal at different clock speeds — specifically a 200mHz sawtooth waveform (0–2.5V) fed in from a signal generator. The prescaler divides the system clock down to the ADC clock; changing it trades conversion speed for accuracy, and we wanted to measure exactly how much.',
+      'Every peripheral was configured by writing directly to registers — ADMUX for reference voltage and input channel, ADCSRA for prescaler bits and enable flags — guided entirely by the ATmega328P datasheet. No library functions abstracted any of this away.',
+      'The firmware ran a two-state FSM: in State 0, the ADC sampled pin A1 every 5ms (200 samples/sec) and stored results in a circular ring buffer of 1000 samples, with a 1Hz LED blink as a status indicator. Pressing Button 1 toggled to State 1, which stopped sampling and blinked the LED at 2Hz. Pressing Button 2 in State 1 transmitted the full buffer over serial to a PC, where MATLAB was used to convert raw ADC counts to voltages and compute offset and gain error.',
+      'We tested prescaler values of 2, 4, 8, 16, 32, 64, and 128, reconfiguring the ADCSRA register for each run and analysing the resulting data in MATLAB to produce offset error and gain error plots across the prescaler range.',
+    ],
+    challenges: [
+      'Configuring the ADC purely from the datasheet meant there was no error message when a register bit was set incorrectly — just unexpected or absent readings. Misreading the ADMUX reference voltage selection bits early on produced readings that were simply wrong with no obvious indication of why, which required re-reading the relevant datasheet section carefully to spot the mistake.',
+      'The 2.5V AREF reference was generated by a voltage divider using 1kΩ resistors with ±5% tolerance, which introduced external measurement uncertainty into the results — meaning some of the measured offset and gain error reflected resistor inaccuracy rather than the ADC\'s intrinsic characteristics alone.',
+      'At low prescaler values (prescaler 2), the ADC clock runs at 8MHz — far faster than the 50–200kHz range recommended in the datasheet for full accuracy. The sample-and-hold capacitor doesn\'t fully charge in time, causing the conversion to read a lower voltage than was actually present. Understanding this mechanism (from the datasheet and supporting references) was key to explaining why the offset error reached 2.45 LSB and gain error reached −3.64 LSB at that setting.',
+      'Full-scale output (255) was never reached in our data, so gain error at the top of the range had to be approximated using the highest observed transition rather than the true final code transition — a limitation worth noting when comparing results to ideal ADC behaviour.',
+    ],
+    whatIdDoDifferently: [
+      'Use a precision voltage reference IC for AREF instead of a resistor voltage divider — the ±5% resistor tolerance was a meaningful source of external error that partially obscured the ADC\'s intrinsic characteristics, making it harder to attribute results cleanly to the prescaler.',
+      'Implement the firmware correction formula (ADC_corrected = (ADC_raw − Offset) × GainFactor) in the actual firmware and measure corrected vs uncorrected error side by side, rather than only proposing it as a recommendation at the end.',
+    ],
+    gallery: [
+      { kind: 'image', src: baremetalFSM, alt: 'FSM diagram', caption: 'Finite State Machine diagram' },
+      { kind: 'image', src: baremetalCircuit, alt: 'Circuit', caption: 'Circuitary' },
+    ],
   },
   {
     id: 'hydraulic-fitting-cv',
-    index: '05',
-    title: 'Hydraulic Fitting Identification Tool',
-    subtitle: 'Computer vision for parts ID, built in industry',
+    index: '04',
+    title: 'Smart Hose End Thread Identification Tool',
+    subtitle: 'YOLOv11 computer vision + PyQt6 desktop app — built for BOA Hydraulics',
     category: 'Internship',
-    period: 'Industry Internship',
+    period: 'BOA Hydraulics — Dec 2025 to Feb 2026',
     summary:
-      'Built a desktop tool that identifies hydraulic fittings from images using a YOLOv11 object-detection model, with a PyQt6 interface so non-technical staff could use it on the shop floor.',
+      'Built a desktop application for BOA Hydraulics that identifies hydraulic fitting thread types from photos using three YOLOv11 models (gender, angle, type) combined with user measurements — matching against a 218-fitting catalogue with 0.5mm tolerance and returning ranked results in seconds.',
     details: [
-      'Trained and integrated a YOLOv11 model to detect and classify hydraulic fitting types from camera input.',
-      'Designed and built the application UI in PyQt6, focused on a simple workflow for staff with no coding background.',
-      'Wrote the Python backend connecting model inference, image handling, and the UI layer into one tool.',
-      'Worked through the practical gap between a model that performs well in testing and a tool that performs reliably in daily use.',
+      'Trained three separate YOLOv11 object-detection models from scratch on a custom dataset of ~1100 images: one each for fitting gender (male/female/SAE), angle (straight/45°/90°), and thread type (BSP/JIC/ORFS/SAE flange).',
+      'Built a layered PyQt6 desktop application with a 4-page workflow (shape check → type check → measurement input → results), a business logic layer coordinating inference and validation, a camera service running on QThread to prevent UI freezing, and a product lookup service matching against a CSV catalogue.',
+      'Designed a hybrid matching algorithm that prioritises user-entered measurements over model predictions — filtering by gender and angle from the model, then matching measurements within ±0.5mm tolerance and returning up to 3 ranked results.',
+      'Collected and labelled ~2000 images manually using a structured naming convention (ProductCode_Model_Background_Lighting_Condition), split 70/15/15 into train/validation/test sets using a Python script.',
+      'Identified and resolved significant overfitting: initial models trained on white backgrounds achieved high mAP50 but failed on real workshop images. Expanding the dataset to varied backgrounds and lighting conditions fixed generalisation.',
+      'All 9 held-out test fittings passed in both indoor and outdoor conditions across the full range of fitting types, with the combined image + measurement approach consistently outperforming image-only detection.',
     ],
-    stack: ['Python', 'YOLOv11', 'Computer Vision', 'PyQt6'],
+    stack: ['Python', 'YOLOv11', 'PyQt6', 'OpenCV', 'PyTorch', 'Computer Vision'],
     diagram: 'vision',
+    image: { src: threadIDCardThumb, alt: 'Data Collection Setup' },
+    overview: [
+      'Beginner hydraulic technicians regularly misidentify thread types — BSP, JIC, ORFS, and SAE flanges can look nearly identical to an untrained eye, and getting it wrong means expensive rework or, worse, a safety risk under pressure. BOA Hydraulics wanted a tool that could put expert-level identification ability in every technician\'s pocket without requiring years of experience to use.',
+      'The solution was a desktop application that lets a user photograph a fitting or upload an existing image, runs it through three computer vision models, and combines those predictions with a simple measurement input to return the closest matching product from BOA\'s catalogue of 218 fittings — all within seconds.',
+      'The key architectural decision was splitting detection into three separate YOLOv11 models (gender, angle, type) rather than attempting a single multi-output model. This made each task simpler and more accurate, and allowed the results to be combined downstream with different confidence weights. Measurement input was prioritised in the matching logic because it proved more reliable than image prediction alone, with model outputs used to narrow the search space rather than make the final call.',
+    ],
+    challenges: [
+      'The first models trained on clean white-background images converged well in training (mAP50 > 95%) but failed almost completely on real workshop photos. The fix was expanding the dataset to include varied lighting (bright/dim), backgrounds (white/workshop), and conditions (hand-held, hose-attached, standalone) — which required recapturing a significant portion of the dataset and retraining from scratch.',
+      'Image-only detection was never reliable enough for production use — similar-looking fittings from different standards are genuinely hard to distinguish visually, especially at different orientations or in poor lighting. This drove the hybrid approach where measurements do the heavy lifting and model predictions constrain the search space.',
+      'The catalogue contains 218 fittings with measurements in millimetres, and many fittings differ by only 1–2mm in key dimensions. Setting the matching tolerance too tight (< 0.5mm) produced too many "no match found" results due to measurement error; too loose produced too many false positives. 0.5mm was the sweet spot found through testing.',
+      'Running camera capture on the main UI thread caused the interface to freeze during preview. Moving the camera stream to a QThread (PyQt6\'s threading model) fixed this but required careful signal/slot design to pass frames back to the UI without race conditions.',
+      'Limited variation in fitting sizes in the training data reduced the model\'s ability to generalise to unseen fittings — the models learned to detect the specific sizes photographed rather than the thread type in general. More size variation in future training runs would address this.',
+    ],
+    whatIdDoDifferently: [
+      'Collect a more size-diverse training dataset from the start — photographing only 23 of 218 fittings meant the models learned features specific to certain sizes. Training on a wider size range would significantly improve generalisation to unseen fittings.',
+      'Build the mobile version earlier in the project timeline rather than as a future enhancement — the application was designed to be used in the field, and a phone-native interface would have enabled more realistic testing under actual workshop conditions.',
+      'Add a feedback loop to the application that lets technicians flag incorrect predictions, so misclassified real-world cases feed back into improving the model over time rather than relying solely on the initial training set.',
+    ],
+    gallery: [
+      { kind: 'image', src: threadIDFinalFidelity, alt: 'Final Fidelity UI', caption: 'Final Fidelity User Interface' },
+      { kind: 'image', src: threadIDModelTrainingResults, alt: 'Model Training Results', caption: 'Model Training Results' },
+      { kind: 'image', src: threadIDModelTraining, alt: 'Model Training', caption: 'Model Training Process' },
+    ],
+    video: {
+      src: threadIDDemo,
+      label: 'Demo',
+      caption: 'Smart Hose End Thread Identification Tool — live demo',
+    },
   },
   {
     id: 'horse-reel-redesign',
-    index: '06',
-    title: 'Horse Reel System Redesign',
-    subtitle: 'Prototyping under real manufacturing constraints',
+    index: '05',
+    title: 'BOApod Hose Reel System Redesign',
+    subtitle: 'Single-motor drive replacing seven — rack-and-pinion selector with Arduino',
     category: 'Internship',
-    period: 'Industry Internship',
+    period: 'BOA Hydraulics — Dec 2025 to Feb 2026',
     summary:
-      'Redesigned and prototyped a horse-reel system, learning to plan around the realities of 3D-printing lead times rather than around the design alone.',
+      'Redesigned the BOApod\'s seven-motor hose reel drive system down to a single DC motor with a servo-actuated rack-and-pinion selector mechanism, prototyped entirely in 3D-printed PLA with an Arduino FSM controlling engagement, direction, and reel selection.',
     details: [
-      'Designed prototype iterations and produced them via 3D printing, validating fit and function before committing to further changes.',
-      'Managed project timelines around a shared, limited 3D printer — print queue time became the real constraint, not design time.',
-      'Learned to sequence design decisions to minimise costly reprints when iteration speed was the bottleneck.',
+      'Designed a single-motor drive architecture: one DC motor drives a shared shaft, with a rack-and-pinion mechanism shifting a sprocket into engagement with the selected hose reel via roller chain — all others remain stationary.',
+      'Iterated the chain-ring design from two prototypes: added a retaining disc beside the sprocket (inspired by bicycle chain-retention systems) to prevent the roller chain derailing sideways during lateral sprocket movement.',
+      'Replaced an initial solenoid actuator with a rack-and-pinion mechanism after testing confirmed the solenoid couldn\'t generate sufficient force to shift the sprocket under load.',
+      'Added a semicircular chain guide beside the sprocket after the first rack-and-pinion prototype allowed the chain to partially disengage during lateral movement — the guide keeps the chain fully seated on the teeth throughout the selector travel.',
+      'Simplified the drive shaft from a tapered design (intended to reduce disengagement friction) to a straight shaft after testing showed the taper provided no measurable improvement while increasing manufacturing complexity.',
+      'Programmed a 3-state Arduino FSM (Idle / Engage Reel / Drive Reel) coordinating the DC motor via H-Bridge and two servo motors for engagement/disengagement, enforcing single-reel-active-at-a-time and preventing unintended rotation during transitions.',
     ],
-    stack: ['3D Printing', 'CAD', 'Prototyping', 'Project Planning'],
+    stack: ['3D Printing', 'CAD', 'Arduino', 'Mechanical Design', 'Prototyping', 'H-Bridge Motor Control'],
     diagram: 'mechanical',
+    image: { src: hoseReelCardThumb, alt: 'BOApod Hose Reel System Redesign' },
+    overview: [
+      'The BOApod is a mobile hydraulic service trailer designed for fast on-site hose assembly and repair. Its original design used seven stepper motors — one per hose reel — each independently driven. While functional, this created seven independent failure points, high wiring complexity, inconsistent reel speeds, and significant manufacturing cost.',
+      'Working with HaoYu Pang, the goal was to consolidate this down to a single motor while preserving the ability to independently control any individual reel. The solution centres on a shared drive shaft driven by one DC motor, with a servo-actuated rack-and-pinion mechanism that slides a sprocket into mesh with a roller chain on the selected reel. All non-selected reels remain decoupled and stationary.',
+      'Every mechanical component — the chain ring, retaining disc, rack-and-pinion assembly, chain guide, and drive shaft — was prototyped in 3D-printed PLA to allow fast iteration. The electronics used an Arduino, H-Bridge motor driver, two servo motors, and push buttons, with firmware implementing a simple three-state FSM to manage reel selection, drive direction, and engagement sequencing.',
+    ],
+    challenges: [
+      'The initial chain ring had no sideways retention — as the modular reel assembly shifted laterally during reel selection, the roller chain could follow and jump off the sprocket teeth entirely, causing unreliable torque transfer. The fix was a retaining disc added flush beside the chain ring to physically block the chain from moving sideways, a solution borrowed directly from bicycle chain-retention design.',
+      'A solenoid was the first choice for actuating the sprocket into position because of its simplicity. Physical testing showed it couldn\'t generate enough force to push the sprocket under realistic load — not enough linear force for the required travel. This required a complete rethink of the actuation method, which led to the rack-and-pinion mechanism.',
+      'The first rack-and-pinion prototype worked for engagement, but the sprocket\'s side-to-side travel during selection caused the chain to partially lift off the teeth and occasionally disengage. Adding a semicircular chain guide beside the sprocket — again drawing on bicycle chain-guide design — solved this by physically constraining the chain\'s path during the lateral shift.',
+      'A tapered drive shaft was designed to reduce friction between the shaft and disengaged sprockets, preventing unintended rotation when a reel wasn\'t selected. After prototyping and testing, the taper produced no measurable improvement over a plain straight shaft — the sprocket disengaged just as cleanly without it. The tapered version was dropped, simplifying the part and reducing machining cost.',
+      'Managing the 3D printing queue was a genuine project constraint. Each design iteration required a print run, and a shared, limited printer meant that poorly sequenced design decisions — printing a full assembly only to find a single feature needed changing — could cost most of a day. This forced more deliberate upfront thinking before committing each part to print.',
+    ],
+    whatIdDoDifferently: [
+      'Prototype only the specific feature being tested rather than reprinting full assemblies — several prints were full mechanism builds when only one subsystem (the chain guide, the shaft taper) was actually changing, wasting significant print time.',
+      'Test actuation force requirements on the bench before committing to a mechanism — quantifying the force needed to shift the sprocket under load earlier would have ruled out the solenoid on paper before building and testing a physical prototype.',
+      'Design parts to be printed in smaller separable sections — large single-piece prints have higher failure rates and longer recovery times. Splitting into joinable sections would have reduced the cost of a failed print significantly.',
+    ],
+    gallery: [
+      { kind: 'image', src: hoseReelCircuit, alt: 'Circuit Diagram', caption: 'Circuit Diagram' },
+    ],
+    video: {
+      src: hoseReelDemo,
+      label: 'Demo',
+      caption: 'BOApod Hose Reel System Redesign — demo run',
+    },
   },
 ];
 
@@ -234,10 +311,10 @@ export const skills: SkillGroup[] = [
   },
   {
     label: 'Computer Vision & Software',
-    items: ['YOLOv11', 'PyQt6', 'Python', 'Image filtering & processing'],
+    items: ['YOLOv11', 'PyQt6', 'Python'],
   },
   { label: 'Hardware & Prototyping', 
-    items: ['3D printing / FDM', 'Laser cutting', 'CAD modelling', 'Soldering', 'Mechanical design iteration', 'Resource-constrained scheduling'] 
+    items: ['3D printing', 'Laser cutting', 'CAD modelling', 'Soldering', 'Mechanical design iteration', 'Resource-constrained scheduling'] 
   },
 ];
 
