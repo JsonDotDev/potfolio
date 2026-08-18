@@ -261,14 +261,13 @@ export const projects: Project[] = [
     category: 'Internship',
     period: 'BOA Hydraulics — Dec 2025 to Feb 2026',
     summary:
-      'Redesigned the BOApod\'s seven-motor hose reel drive system down to a single DC motor with a servo-actuated rack-and-pinion selector mechanism, prototyped entirely in 3D-printed PLA with an Arduino FSM controlling engagement, direction, and reel selection.',
+      'Redesigned the BOApod\'s seven-motor hose reel drive system down to a single DC motor with a servo-actuated rack-and-pinion selector mechanism, prototyped entirely in 3D-printed PLA with an Arduino controlling engagement, direction, and reel selection.',
     details: [
       'Designed a single-motor drive architecture: one DC motor drives a shared shaft, with a rack-and-pinion mechanism shifting a sprocket into engagement with the selected hose reel via roller chain, all others remain stationary.',
       'Iterated the chain-ring design from two prototypes: added a retaining disc beside the sprocket (inspired by bicycle chain-retention systems) to prevent the roller chain derailing sideways during lateral sprocket movement.',
       'Replaced an initial solenoid actuator with a rack-and-pinion mechanism after testing confirmed the solenoid couldn\'t generate sufficient force to shift the sprocket under load.',
       'Added a semicircular chain guide beside the sprocket after the first rack-and-pinion prototype allowed the chain to partially disengage during lateral movement — the guide keeps the chain fully seated on the teeth throughout the selector travel.',
       'Simplified the drive shaft from a tapered design (intended to reduce disengagement friction) to a straight shaft after testing showed the taper provided no measurable improvement while increasing manufacturing complexity.',
-      'Programmed a 3-state Arduino FSM (Idle / Engage Reel / Drive Reel) coordinating the DC motor via H-Bridge and two servo motors for engagement/disengagement, enforcing single-reel-active-at-a-time and preventing unintended rotation during transitions.',
     ],
     stack: ['3D Printing', 'CAD', 'Arduino', 'Mechanical Design', 'Prototyping', 'H-Bridge Motor Control'],
     diagram: 'mechanical',
@@ -276,7 +275,7 @@ export const projects: Project[] = [
     overview: [
       'The BOApod is a mobile hydraulic service trailer designed for fast on-site hose assembly and repair. Its original design used seven stepper motors, one per hose reel, each independently driven. While functional, this created seven independent failure points, high wiring complexity, inconsistent reel speeds, and significant manufacturing cost.',
       'The goal was to consolidate this down to a single motor while preserving the ability to independently control any individual reel. The solution centres on a shared drive shaft driven by one DC motor, with a servo-actuated rack-and-pinion mechanism that slides a sprocket into mesh with a roller chain on the selected reel. All non-selected reels remain decoupled and stationary.',
-      'Every mechanical component: the chain ring, retaining disc, rack-and-pinion assembly, chain guide, and drive shaft, was prototyped in 3D-printed PLA to allow fast iteration. The electronics used an Arduino, H-Bridge motor driver, two servo motors, and push buttons, with firmware implementing a simple three-state FSM to manage reel selection, drive direction, and engagement sequencing.',
+      'Every mechanical component: the chain ring, retaining disc, rack-and-pinion assembly, chain guide, and drive shaft, was prototyped in 3D-printed PLA to allow fast iteration. The electronics used an Arduino, H-Bridge motor driver, two servo motors, and push buttons, with firmware implementing a simple code to manage reel selection, drive direction, and engagement sequencing.',
     ],
     challenges: [
       'The initial chain ring had no sideways retention, as the modular reel assembly shifted laterally during reel selection, the roller chain could follow and jump off the sprocket teeth entirely, causing unreliable torque transfer. The fix was a retaining disc added flush beside the chain ring to physically block the chain from moving sideways, a solution borrowed directly from bicycle chain-retention design.',
